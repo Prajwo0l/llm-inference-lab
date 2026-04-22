@@ -1,34 +1,61 @@
+"""
+inference.py
+────────────
+Text generation utilities — KV cache vs naive, with timing.
+
+Usage
+─────
+    from inference import generate_text, benchmark
+
+    # Generate text
+    text = generate_text(model, dataset, prompt="To be", max_new_tokens=200)
+
+    # Benchmark KV cache vs naive
+    results = benchmark(model, dataset, prompt="To be", new_tokens=100)
+"""
+
 import time
-import torch 
+import torch
+
 
 def generate_text(
-        model,
-        dataset,
-        prompt: str ="To be",
-        max_new_tokens : int =200,
-        temperature : float =0.8,
-        top_k : int =40,
-        use_kv_cache : bool =True,
-        device : str | None =None, 
-
-)->str:
+    model,
+    dataset,
+    prompt:         str   = "To be",
+    max_new_tokens: int   = 500,
+    temperature:    float = 0.8,
+    top_k:          int   = 40,
+    use_kv_cache:   bool  = True,
+    device:         str | None = None,
+) -> str:
     """Generate text from a prompt.
-    args: 
-        model : Trained Gpt instance
-        dataset :Char dataset
-        prompt : starting text string
-        """
+
+    Args:
+        model         : Trained GPT instance.
+        dataset       : CharDataset (provides encode/decode).
+        prompt        : Starting text string.
+        max_new_tokens: Number of tokens to generate.
+        temperature   : Sampling temperature.
+        top_k         : Top-k filtering (None = disabled).
+        use_kv_cache  : Use KV cache for fast inference.
+        device        : Device override, or None to match model.
+
+    Returns:
+        Generated text string (prompt + continuation).
+    """
     if device is None:
-        device =next(model.paramters()).device
+        device = next(model.parameters()).device
+
     ctx = dataset.encode(prompt).unsqueeze(0).to(device)
-    out =model.generate(ctx , max_new_tokens,temperature,top_k,use_kv_cache)
-    return dataset.decode(out[0].cpu)
+    out = model.generate(ctx, max_new_tokens, temperature, top_k, use_kv_cache)
+    return dataset.decode(out[0].cpu())
+
 
 def benchmark(
     model,
     dataset,
     prompt:     str = "To be",
-    new_tokens: int = 100,
+    new_tokens: int = 500,
     runs:       int = 3,
     device:     str | None = None,
 ) -> dict:
