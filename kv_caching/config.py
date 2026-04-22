@@ -1,10 +1,10 @@
 class GPTConfig:
     #Vocabulary and context
     vocab_size:int =65
-    block_size : int=128
+    block_size : int=512
 
     #Model size
-    n_embed:int=192  #embedding dimension
+    n_embd:int=192  #embedding dimension
     n_head:int=6    #number of attentuion heads
     n_layer:int=4 # number of stacked transfoermer blocks
 
