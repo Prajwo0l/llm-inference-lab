@@ -226,11 +226,11 @@ class GPT(nn.Module):
             if write_pos >= self.config.block_size:
                 break                            # hit context limit
 
-            logits, _, kv_caches = self(next_tok, kv_caches=kv_caches)
-
-            # Advance cache_pos
+            # Advance cache_pos BEFORE forward so past_len is correct inside forward
             for cache in kv_caches:
                 cache["cache_pos"] = write_pos
+
+            logits, _, kv_caches = self(next_tok, kv_caches=kv_caches)
 
             next_tok = self._sample(logits[:, -1, :], temperature, top_k)
             out_ids[:, write_pos] = next_tok.squeeze(-1)
