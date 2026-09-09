@@ -19,9 +19,18 @@ def main():
                         help="Run evaluate.py automatically after training")
     parser.add_argument("--save_dir", type=str,  default=".",
                         help="Root dir for checkpoints/ and results/")
+    parser.add_argument("--device",   type=str,  default=None,
+                        help="cuda / mps / cpu — default: auto-detect best available")
     args = parser.parse_args()
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if args.device:
+        device = args.device
+    elif torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"   # Apple Silicon GPU — much faster than CPU for training
+    else:
+        device = "cpu"
 
     # ── Train ─────────────────────────────────────────────────────────────
     model, dataset = train(

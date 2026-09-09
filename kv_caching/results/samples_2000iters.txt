@@ -1,0 +1,60 @@
+GPT From Scratch — 2000 iterations
+Val PPL: 5.94  BPC: 2.5701
+============================================================
+
+Prompt: "HAMLET:"  temp=0.6
+HAMLET:
+And not thing thee then themer on to whe men the ban to thathereren demp unond the nof be to welids he the man, wore plie teerserver are of come, mine me comport not my cournded;
+But it supontmer to in all thing and that ats he good seat
+The to wear a your son the a the at him bither.
+
+DUKE VINCENT
+------------------------------------------------------------
+
+Prompt: "HAMLET:"  temp=0.8
+HAMLET:
+I bust that berut non then yous malt the by breand armack striane I farend this a there re aubof degar in to paled mortine at thee down for be these the he
+But in he have boot your your rall the day heather's,
+To for that bean wark, prowan of his befiess
+Thid grover hem. Whe are is, of the a wilth 
+------------------------------------------------------------
+
+Prompt: "HAMLET:"  temp=1.0
+HAMLET:
+I mit plore mine on sto fore that be theme kize for wan veplorints act thalkse an and to ta the wis we ase, tilll so; and theenke Bunst worke in but for your soup.
+
+DUKE VINGHENS IMAR:
+You hon's a for thy? There amplefor vinly, my any by
+RiVave abother manit, regets be mince,
+And Which I before hav
+------------------------------------------------------------
+
+Prompt: "To be, or not to be"  temp=0.6
+To be, or not to be she the beear dad, my the gavelle istt then my souppure tthourst do the here the seeee sechappe shourt the the to crounse the mothe an though the of the hear warm:
+so the have the will the love so have this kep,
+the chall a him the liven heary good like and live
+of mare cann fare thy from and do th
+------------------------------------------------------------
+
+Prompt: "To be, or not to be"  temp=0.8
+To be, or not to belall I dorry slely geaveve my nother lat this shon like povid, falll ive withere a and the langere ouparse thous; is and and she allb-d moring the to whus undrand.
+
+KING RICHARD II:
+Aloble go the sin, the recends a a my pleaten
+Stake set this that that all bute of chirt,
+And your while your but so t
+------------------------------------------------------------
+
+Prompt: "To be, or not to be"  temp=1.0
+To be, or not to be her, anine isthought, toungh he ounld thee berrp they he his bere otwoour hathth kingop ivenat.
+
+ANGETOR:
+She rege to blied se oneandy verservy galloure of him.
+
+Sand I knong the hear speak's reeclly ca and be pay
+And cactalll pron'd not where enesir,
+But exfatin: puish farkef--
+
+hapst nor they lei
+------------------------------------------------------------
+

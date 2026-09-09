@@ -44,6 +44,7 @@ def train(
     device:     str  | None = None,
     log_every:  int         = 100,
     save_dir:   str         = ".",
+    block_size: int  | None = None,
 ) -> tuple:
     """Train a character-level GPT and save checkpoint + loss log.
 
@@ -55,6 +56,11 @@ def train(
         device     : 'cpu', 'cuda', or None (auto).
         log_every  : Log loss every N steps.
         save_dir   : Root dir for checkpoints/ and results/ folders.
+        block_size : Context length override, or None to use GPTConfig's
+                     default (512). A larger block_size is needed to
+                     generate/benchmark sequences longer than 512 tokens —
+                     the KV-cache buffer and learned positional embeddings
+                     are both sized to block_size.
 
     Returns:
         (model, dataset)
@@ -76,7 +82,7 @@ def train(
             text = _DEFAULT_TEXT
             print(f"Corpus       : built-in default  ({len(text):,} chars)")
 
-    _cfg_block = GPTConfig().block_size
+    _cfg_block = block_size if block_size is not None else GPTConfig().block_size
     dataset = CharDataset(text, block_size=_cfg_block)
     print(f"Vocab size   : {dataset.vocab_size}")
 

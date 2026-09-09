@@ -1,0 +1,85 @@
+GPT From Scratch — 5000 iterations
+Val PPL: 4.06  BPC: 2.0220
+============================================================
+
+Prompt: "HAMLET:"  temp=0.6
+HAMLET:
+How is hart now, pray my my soul deep thy shall not so shall be
+That lose so-man heart that the should of his him.
+
+First the glady be his pack of was deceived.
+
+DUKE OF YORK:
+Yes, my lord, brave the made the sensenses
+In my hoest very of his soften's speak.
+
+DUKE OF AUMERLE:
+All me, what he not so
+------------------------------------------------------------
+
+Prompt: "HAMLET:"  temp=0.8
+HAMLET:
+Grant then, thou that is refly let's shall death, sir, and for our rejoy,
+The say not wee that must and horse is a eyes
+That he stoongen she with haste to stand then me!
+And here so respects as to bout and the law,
+Let thou shalt the well take time of our the heart;
+Ungravel of I duke all that a ca
+------------------------------------------------------------
+
+Prompt: "HAMLET:"  temp=1.0
+HAMLET:
+Where dare her follow thy balout ever less at before my wantomons.
+
+KING RICHARD III:
+I cannt say the to here throrn, for sille of us:
+Lord of my such shame that my father's clares.
+
+GLOUCESTER:
+Nor arm maquist powers! Shing Warwick of Clarence,
+You am courtful brother no mighty gove
+If wear it wor
+------------------------------------------------------------
+
+Prompt: "To be, or not to be"  temp=0.6
+To be, or not to be the sea more than the we proclaim'd me;
+And the world to me of the fair prison of the graves
+As that the day the presont to the part themself,
+Thou not the remore to the partient thy reason,
+That hand a may and of me of the news?
+
+Second Senator:
+Why, sir, I will not, I'll surped in Tyrel.
+
+ESCALUS
+------------------------------------------------------------
+
+Prompt: "To be, or not to be"  temp=0.8
+To be, or not to bellive.
+
+LEONTES:
+None honour.
+
+HORTENSIO:
+Twins to priefards here: where a will for the that and
+Have been an of this my necessure.
+
+MIRANDA:
+O, if the death world and look with your seents,
+Of were for you take me you, rage it by die.
+
+LUCIO:
+How catchman, my lord, not that I may live,
+As we hazed 
+------------------------------------------------------------
+
+Prompt: "To be, or not to be"  temp=1.0
+To be, or not to bews, twenty to me heart, and think off the very
+will me the and mangerove'd in all of a cared.
+Hering yon swear, my for it piercy me;
+Cousplat we which pack you see, you stry:
+He saw you are so to shame you so majesty;
+Being the had raight the no name me wisk here,
+'I came him all be duared him: if I
+------------------------------------------------------------
+

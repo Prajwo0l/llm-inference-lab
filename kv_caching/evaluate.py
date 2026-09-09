@@ -23,6 +23,8 @@ import sys
 import csv
 import math
 import time
+import platform
+import subprocess
 import argparse
 import torch
 import torch.nn.functional as F
@@ -35,6 +37,24 @@ import numpy as np
 from config  import GPTConfig
 from dataset import CharDataset
 from model   import GPT
+
+
+def device_label(device: str = "cpu") -> str:
+    """Detects the actual CPU/GPU this benchmark is running on, instead of
+    hardcoding a specific machine's name. Falls back gracefully if the
+    platform-specific lookup fails."""
+    if device != "cpu":
+        return device.upper()
+    try:
+        if platform.system() == "Darwin":
+            name = subprocess.run(
+                ["sysctl", "-n", "machdep.cpu.brand_string"],
+                capture_output=True, text=True, timeout=2,
+            ).stdout.strip()
+            return f"CPU ({name})" if name else "CPU (unknown)"
+        return f"CPU ({platform.processor() or platform.machine()})"
+    except Exception:
+        return "CPU (unknown)"
 
 
 # ── Plot theme ────────────────────────────────────────────────────────────────
@@ -158,12 +178,17 @@ def kv_cache_benchmark(model, ds, device, save_dir,
     if sweep_lengths is None:
         sweep_lengths = [50, 100, 150, 200, 250, 300, 400, 500]
 
-    BLOCK   = 512   # must match model block_size
-    MAX_NEW = 500   # tokens for per-step timing chart
+    BLOCK   = model.config.block_size   # derived from the actual checkpoint, not hardcoded
+    MAX_NEW = max(sweep_lengths)        # per-step timing chart covers the full sweep
 
     ctx = ds.encode(prompt).unsqueeze(0).to(device)
     assert ctx.shape[1] < BLOCK, \
         f"Prompt too long ({ctx.shape[1]} tokens) — must be < {BLOCK}"
+    assert ctx.shape[1] + MAX_NEW <= BLOCK, \
+        (f"Largest sweep length ({MAX_NEW}) + prompt ({ctx.shape[1]}) exceeds "
+         f"this checkpoint's block_size ({BLOCK}) — the KV-cache path would "
+         f"silently truncate. Retrain with a larger block_size, or lower "
+         f"sweep_lengths.")
 
     print(f"\n{'='*60}")
     print(f"  KV Cache Benchmark  —  {iters} iter checkpoint")
@@ -263,9 +288,11 @@ def kv_cache_benchmark(model, ds, device, save_dir,
     os.makedirs(out_dir, exist_ok=True)
     txt_path = os.path.join(out_dir, f"kv_benchmark_{iters}iters.txt")
     with open(txt_path, "w", encoding="utf-8") as f:
+        n_params = sum(p.numel() for p in model.parameters()) / 1e6
         f.write(f"KV Cache Benchmark — {iters} iterations\n")
-        f.write(f"Model  : 1.82M params  block_size=128  n_layer=4  n_embd=192\n")
-        f.write(f"Device : CPU (Intel i5-8300H)\n\n")
+        f.write(f"Model  : {n_params:.2f}M params  block_size={model.config.block_size}  "
+                f"n_layer={model.config.n_layer}  n_embd={model.config.n_embd}\n")
+        f.write(f"Device : {device_label(device)}\n\n")
         f.write(f"{'Tokens':>7}  {'Naive (s)':>10}  {'KV (s)':>8}  "
                 f"{'Speedup':>9}  {'tok/s naive':>12}  {'tok/s kv':>10}\n")
         f.write("─" * 65 + "\n")
@@ -288,7 +315,7 @@ def kv_cache_benchmark(model, ds, device, save_dir,
 
     fig = plt.figure(figsize=(16, 14))
     fig.suptitle(
-        f"KV Cache vs Naive  ·  GPT from scratch ({iters} iters)  ·  CPU (i5-8300H)",
+        f"KV Cache vs Naive  ·  GPT from scratch ({iters} iters)  ·  {device_label(device)}",
         fontsize=14, fontweight="bold", color=TXT, y=1.01,
     )
     gs = gridspec.GridSpec(3, 2, figure=fig, hspace=0.48, wspace=0.32)
@@ -363,12 +390,12 @@ def kv_cache_benchmark(model, ds, device, save_dir,
     ax5.axis("off")
     stats = (
         f"  Model        GPT from scratch\n"
-        f"  Params       1.82 M\n"
+        f"  Params       {n_params:.2f} M\n"
         f"  Checkpoint   {iters} iterations\n"
         f"  Block size   {BLOCK} tokens\n"
-        f"  n_layer      4\n"
-        f"  n_embd       192\n"
-        f"  Device       CPU  (i5-8300H)\n"
+        f"  n_layer      {model.config.n_layer}\n"
+        f"  n_embd       {model.config.n_embd}\n"
+        f"  Device       {device_label(device)}\n"
         f"  ────────────────────────────────\n"
         f"  Naive {best['tokens']}t   {best['naive_s']:.3f} s\n"
         f"  KV    {best['tokens']}t   {best['kv_s']:.3f} s\n"
